@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  labels:
+    nginx: v1.0.0
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      nginx: v1.0.0
+  template:
+    metadata:
+      labels:
+        nginx: v1.0.0
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        imagePullPolicy: IfNotPresent
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginxsvc
+  labels:
+    nginxsvc: v1.0.0
+spec:
+  selector:
+    nginx: v1.0.0
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+    nodePort: 30001
+  type: NodePort
